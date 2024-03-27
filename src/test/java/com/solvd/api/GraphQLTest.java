@@ -1,9 +1,5 @@
 package com.solvd.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solvd.api.entity.Comment;
 import com.solvd.api.entity.User;
 import com.solvd.api.enums.HttpMethodTypeEnum;
 import com.solvd.api.graphql.GraphQLRequest;
@@ -24,7 +20,7 @@ public class GraphQLTest {
 
     @Test(priority = 1)
     public void getAllUsersTest() {
-        String query = FileReader.getQueryFromFile("src/test/resources/graphql/getAllUsers.graphql");
+        String query = FileReader.getQueryFromFile("src/test/resources/graphql/get_all_users.graphql");
 
         GRAPH_QL_QUERY.setQuery(query);
         Response response = GRAPH_QL_REQUEST.executeGraphQL(HttpMethodTypeEnum.POST, GRAPH_QL_QUERY);
@@ -34,7 +30,7 @@ public class GraphQLTest {
 
     @Test(priority = 2)
     public void createUserTest() {
-        String query = FileReader.getQueryFromFile("src/test/resources/graphql/createUser.graphql");
+        String query = FileReader.getQueryFromFile("src/test/resources/graphql/create_user.graphql");
 
         User generatedUser = User.generateUser();
         GRAPH_QL_QUERY.setQuery(query);
@@ -48,7 +44,7 @@ public class GraphQLTest {
 
     @Test(priority = 3)
     public void getByIdUserTest() {
-        String query = FileReader.getQueryFromFile("src/test/resources/graphql/getUserById.graphql");
+        String query = FileReader.getQueryFromFile("src/test/resources/graphql/get_user_by_id.graphql");
 
         GRAPH_QL_QUERY.setQuery(query);
         GRAPH_QL_QUERY.setVariables(user);
@@ -61,7 +57,7 @@ public class GraphQLTest {
 
     @Test(priority = 4)
     public void updateUserTest() {
-        String query = FileReader.getQueryFromFile("src/test/resources/graphql/updateUser.graphql");
+        String query = FileReader.getQueryFromFile("src/test/resources/graphql/update_user.graphql");
 
         User updatedUser = User.builder()
                 .id(user.getId())
@@ -80,7 +76,7 @@ public class GraphQLTest {
 
     @Test(priority = 5)
     public void deleteUserTest() {
-        String query = FileReader.getQueryFromFile("src/test/resources/graphql/deleteUser.graphql");
+        String query = FileReader.getQueryFromFile("src/test/resources/graphql/delete_user.graphql");
 
         GRAPH_QL_QUERY.setQuery(query);
         GRAPH_QL_QUERY.setVariables(user);

@@ -7,6 +7,6 @@ public class UpdateCommentMethod extends BaseRestAssuredMethod {
     public static final String PUT_JSON_SCHEME_PATH = "comments/_put/rs.json";
 
     public UpdateCommentMethod(Integer commentId) {
-        endpointUrl = Constants.GOREST_LINK + "/comments/" + commentId;
+        endpointUrl = Constants.GOREST_BASE_URL + "/comments/" + commentId;
     }
 }
