@@ -8,6 +8,6 @@ public class PostUserMethod extends BaseRestAssuredMethod {
     public static final String POST_JSON_SCHEMA_PATH = "users/_post/rs.json";
 
     public PostUserMethod() {
-        endpointUrl = Constants.GOREST_LINK + "/users";
+        endpointUrl = Constants.GOREST_BASE_URL + "/users";
     }
 }

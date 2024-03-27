@@ -1,15 +1,15 @@
 package com.solvd.api.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     private Integer id;
     private String name;

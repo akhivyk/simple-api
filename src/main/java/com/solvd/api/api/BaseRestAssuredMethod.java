@@ -4,14 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvd.api.enums.HttpMethodTypeEnum;
 import com.solvd.api.factory.ObjectMapperFactory;
-import com.solvd.api.utils.ConfigReader;
+import com.solvd.api.graphql.GraphQlQuery;
+import com.solvd.api.utils.FileReader;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.Map;
+
 public abstract class BaseRestAssuredMethod {
-    private static final String BEARER_TOKEN = ConfigReader.getValue("token");
+    private static final String BEARER_TOKEN = FileReader.getConfigValue("token");
     private static final ObjectMapper objectMapper = ObjectMapperFactory.buildNew();
     public String endpointUrl;
 
@@ -60,4 +63,25 @@ public abstract class BaseRestAssuredMethod {
         };
     }
 
+    public Response executeGraphQL(HttpMethodTypeEnum methodType, GraphQlQuery query) {
+        RequestSpecification requestSpec = RestAssured.given()
+                .header("Authorization", "Bearer " + BEARER_TOKEN)
+                .header("Content-Type", "application/json")
+                .log().all();
+
+        requestSpec.body(query);
+
+        Response response = switch (methodType) {
+            case GET -> requestSpec.get(endpointUrl);
+            case POST -> requestSpec.post(endpointUrl);
+            case PUT -> requestSpec.put(endpointUrl);
+            case PATCH -> requestSpec.patch(endpointUrl);
+            case DELETE -> requestSpec.delete(endpointUrl);
+            default -> throw new IllegalArgumentException("Unsupported HTTP method: " + methodType);
+        };
+
+        response.then().log().all();
+
+        return response;
+    }
 }

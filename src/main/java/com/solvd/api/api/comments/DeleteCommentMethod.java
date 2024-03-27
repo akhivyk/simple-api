@@ -6,6 +6,6 @@ import com.solvd.api.utils.Constants;
 public class DeleteCommentMethod extends BaseRestAssuredMethod {
 
     public DeleteCommentMethod(Integer commentId) {
-        endpointUrl = Constants.GOREST_LINK + "/comments/" + commentId;
+        endpointUrl = Constants.GOREST_BASE_URL + "/comments/" + commentId;
     }
 }
