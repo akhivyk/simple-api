@@ -14,29 +14,33 @@ import org.testng.annotations.Test;
 
 public class GraphQLTest {
 
-    private static final GraphQLRequest GRAPH_QL_REQUEST = new GraphQLRequest();
-    private static final GraphQlQuery GRAPH_QL_QUERY = new GraphQlQuery();
     private User user;
 
     @Test(priority = 1)
     public void getAllUsersTest() {
+        GraphQLRequest graphQLRequest = new GraphQLRequest();
+        GraphQlQuery graphQlQuery = new GraphQlQuery();
+
         String query = FileReader.getQueryFromFile("src/test/resources/graphql/get_all_users.graphql");
 
-        GRAPH_QL_QUERY.setQuery(query);
-        Response response = GRAPH_QL_REQUEST.executeGraphQL(HttpMethodTypeEnum.POST, GRAPH_QL_QUERY);
+        graphQlQuery.setQuery(query);
+        Response response = graphQLRequest.executeGraphQL(HttpMethodTypeEnum.POST, graphQlQuery);
 
         RestAssuredUtils.assertSchema(response, "graphql/assertion/graphql_rs_all_users.json");
     }
 
     @Test(priority = 2)
     public void createUserTest() {
+        GraphQLRequest graphQLRequest = new GraphQLRequest();
+        GraphQlQuery graphQlQuery = new GraphQlQuery();
+
         String query = FileReader.getQueryFromFile("src/test/resources/graphql/create_user.graphql");
 
         User generatedUser = User.generateUser();
-        GRAPH_QL_QUERY.setQuery(query);
-        GRAPH_QL_QUERY.setVariables(generatedUser);
+        graphQlQuery.setQuery(query);
+        graphQlQuery.setVariables(generatedUser);
 
-        Response response = GRAPH_QL_REQUEST.executeGraphQL(HttpMethodTypeEnum.POST, GRAPH_QL_QUERY);
+        Response response = graphQLRequest.executeGraphQL(HttpMethodTypeEnum.POST, graphQlQuery);
         user = JsonPath.from(response.asString()).getObject("data.createUser.user", User.class);
 
         RestAssuredUtils.assertSchema(response, "graphql/assertion/graphql_rs_user_create.json");
@@ -44,12 +48,15 @@ public class GraphQLTest {
 
     @Test(priority = 3)
     public void getByIdUserTest() {
+        GraphQLRequest graphQLRequest = new GraphQLRequest();
+        GraphQlQuery graphQlQuery = new GraphQlQuery();
+
         String query = FileReader.getQueryFromFile("src/test/resources/graphql/get_user_by_id.graphql");
 
-        GRAPH_QL_QUERY.setQuery(query);
-        GRAPH_QL_QUERY.setVariables(user);
+        graphQlQuery.setQuery(query);
+        graphQlQuery.setVariables(user);
 
-        Response response = GRAPH_QL_REQUEST.executeGraphQL(HttpMethodTypeEnum.POST, GRAPH_QL_QUERY);
+        Response response = graphQLRequest.executeGraphQL(HttpMethodTypeEnum.POST, graphQlQuery);
         User retrievedUser = JsonPath.from(response.asString()).getObject("data.user", User.class);
 
         Assert.assertEquals(retrievedUser.getId(), user.getId(), "Retrieved user id isn't equals to expected!");
@@ -57,6 +64,9 @@ public class GraphQLTest {
 
     @Test(priority = 4)
     public void updateUserTest() {
+        GraphQLRequest graphQLRequest = new GraphQLRequest();
+        GraphQlQuery graphQlQuery = new GraphQlQuery();
+
         String query = FileReader.getQueryFromFile("src/test/resources/graphql/update_user.graphql");
 
         User updatedUser = User.builder()
@@ -64,10 +74,10 @@ public class GraphQLTest {
                 .name("Updated Name" + RandomStringUtils.randomAlphabetic(3))
                 .build();
 
-        GRAPH_QL_QUERY.setQuery(query);
-        GRAPH_QL_QUERY.setVariables(updatedUser);
+        graphQlQuery.setQuery(query);
+        graphQlQuery.setVariables(updatedUser);
 
-        Response response = GRAPH_QL_REQUEST.executeGraphQL(HttpMethodTypeEnum.POST, GRAPH_QL_QUERY);
+        Response response = graphQLRequest.executeGraphQL(HttpMethodTypeEnum.POST, graphQlQuery);
         User retrievedUser = JsonPath.from(response.asString()).getObject("data.updateUser.user", User.class);
 
         Assert.assertEquals(retrievedUser.getId(), user.getId(), "Updated user id isn't equals to expected!");
@@ -76,12 +86,15 @@ public class GraphQLTest {
 
     @Test(priority = 5)
     public void deleteUserTest() {
+        GraphQLRequest graphQLRequest = new GraphQLRequest();
+        GraphQlQuery graphQlQuery = new GraphQlQuery();
+
         String query = FileReader.getQueryFromFile("src/test/resources/graphql/delete_user.graphql");
 
-        GRAPH_QL_QUERY.setQuery(query);
-        GRAPH_QL_QUERY.setVariables(user);
+        graphQlQuery.setQuery(query);
+        graphQlQuery.setVariables(user);
 
-        Response response = GRAPH_QL_REQUEST.executeGraphQL(HttpMethodTypeEnum.POST, GRAPH_QL_QUERY);
+        Response response = graphQLRequest.executeGraphQL(HttpMethodTypeEnum.POST, graphQlQuery);
         User deletedUser = JsonPath.from(response.asString()).getObject("data.deleteUser.user", User.class);
 
         Assert.assertEquals(deletedUser.getId(), deletedUser.getId(), "Id of deleted user isn't equals to expected!");
